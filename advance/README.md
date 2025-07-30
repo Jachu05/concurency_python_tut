@@ -10,6 +10,7 @@ python advance/04_futures_example.py              # concurrent.futures overview
 python advance/05_asyncio_executor_bridge.py      # bridge blocking ↔ async code  
 python advance/06_threading_executor_only.py      # pure threading / executors    
 python advance/07_cooperative_vs_preemptive.py    # co-op vs. pre-emptive sched.  
+python advance/08_asyncio_queue_example.py      # producer–consumer queue   
 ```
 
 All examples run on the standard library (Python ≥ 3.10, no 3rd-party deps).
@@ -24,7 +25,8 @@ All examples run on the standard library (Python ≥ 3.10, no 3rd-party deps).
 5. [Bridging sync and async worlds](#5-bridging-sync-and-async-worlds)
 6. [Threading & executors only](#6-threading--executors-only)
 7. [Cooperative vs. pre-emptive scheduling](#7-cooperative-vs-pre-emptive-scheduling)
-8. [Picking the right tool](#8-picking-the-right-tool)
+8. [Producer / Consumer queues](#8-producer--consumer-queues)
+9. [Picking the right tool](#9-picking-the-right-tool)
 
 ---
 
@@ -53,7 +55,7 @@ _File: `03_asyncio_futures_example.py`_
 
 Shows how **`asyncio.create_task()`** returns a `Task` (sub-class of `Future`), how to create a _bare_ `Future`, attach callbacks via `add_done_callback()`, and consume results with `asyncio.as_completed()`.
 
-Useful if students only ever used `await`/`gather` and never touched the underlying primitive.
+Useful if only ever used `await`/`gather` and never touched the underlying primitive.
 
 ---
 
@@ -101,7 +103,14 @@ Even though Python’s GIL prevents true CPU parallelism, the difference in _who
 
 ---
 
-## 8. Picking the right tool
+## 8. Producer / Consumer queues
+_File: `08_asyncio_queue_example.py`_
+
+Shows how **`asyncio.Queue`** enables safe communication between concurrent coroutines without explicit locks.  Multiple *producers* `put()` random integers into the queue while *consumers* `get()` them, simulating I/O and processing delays.  The queue’s built-in back-pressure (``maxsize``) automatically balances the flow.
+
+---
+
+## 9. Picking the right tool
 
 | Workload type | Recommended primitive                      | Example here |
 |---------------|---------------------------------------------|--------------|

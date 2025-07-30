@@ -30,7 +30,7 @@ async def unordered_append(shared: List[int], value: int) -> None:
     shared.append(value)
 
 
-async def ordered_insert(shared: List[Optional[int]], value: int, index: int, lock: asyncio.Lock) -> None:
+async def ordered_insert(shared: List[Optional[int]], value: int, index: int) -> None:
     # Random sleep again; but we lock and write to a fixed index, preserving order
     await asyncio.sleep(random.random() * 0.05)
     shared[index] = value
@@ -47,8 +47,7 @@ async def main() -> None:
 
     print("Running ORDERED test with asyncio.Lock and fixed indices …")
     ordered: List[Optional[int]] = [None] * n
-    lock = asyncio.Lock()
-    await asyncio.gather(*(ordered_insert(ordered, i, i, lock) for i in range(n)))
+    await asyncio.gather(*(ordered_insert(ordered, i, i) for i in range(n)))
     print("Ordered result:", ordered)
 
 
