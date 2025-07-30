@@ -11,7 +11,7 @@ that communicate exclusively through an ``asyncio.Queue``:
 • Consumers continuously ``queue.get()`` items, perform (fake) processing, and
   call ``queue.task_done()`` when finished.
 
-The queue guarantees **FIFO order** and **automatic back-pressure** – ``put()``
+The queue guarantees **FIFO order** and **automatic back-pressure** ``put()``
 blocks when the queue reaches ``maxsize`` while consumers are slower than
 producers.  No extra locks are required because the queue is already designed
 for safe, concurrent use within a single event-loop.
@@ -86,8 +86,6 @@ async def main() -> None:
 
     # Wait for all producers to finish
     await asyncio.gather(*producers)
-
-    print("hehehehhe")
 
     # Signal consumers to exit (one *None* per consumer)
     for _ in range(num_consumers):
